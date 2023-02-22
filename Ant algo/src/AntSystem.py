@@ -3,7 +3,7 @@ import UnionFindNodes as u
 import random
 
 
-class AntColonyTSPAlgo:
+class AntSystem:
 
     # initialize algorithm with default alpha, beta and evaporation_rate value
     def __init__(self, alpha=1, beta=1, rho=0.5):
@@ -35,7 +35,8 @@ class AntColonyTSPAlgo:
         currentNode = start
         while ufn.count() > 1:
             finalCurrentNode = currentNode
-            edgesToUnvisitedAdjacentNodes = self.get_edges_to_unvisited_adjacent_nodes(graph, ufn, finalCurrentNode)
+            edgesToUnvisitedAdjacentNodes = self.get_edges_to_unvisited_adjacent_nodes(
+                graph, ufn, finalCurrentNode)
             chosenEdge = max(edgesToUnvisitedAdjacentNodes,
                              key=lambda item: item[2]['pheromones'])
             finalTour.append(chosenEdge)
@@ -54,7 +55,8 @@ class AntColonyTSPAlgo:
         for edge in list(graph.edges(data=True)):
             if (edge[0], edge[1]) in newPheromonesPerEdge:
                 if self.rho == 0:
-                    edge[2]['pheromones'] = edge[2]["pheromones"] + newPheromonesPerEdge[(edge[0], edge[1])]
+                    edge[2]['pheromones'] = edge[2]["pheromones"] + \
+                        newPheromonesPerEdge[(edge[0], edge[1])]
                 else:
                     edge[2]['pheromones'] = (1 - self.rho) * edge[2]["pheromones"] + self.rho * (
                         newPheromonesPerEdge[(edge[0], edge[1])])
@@ -85,8 +87,10 @@ class AntColonyTSPAlgo:
 
         while ufn.count() > 1:
             finalCurrentNode = currentNode
-            edgesToUnvisitedAdjacentNodes = self.get_edges_to_unvisited_adjacent_nodes(graph, ufn, finalCurrentNode)
-            chosenEdge = self.get_edge_with_best_visiting_probability(edgesToUnvisitedAdjacentNodes)
+            edgesToUnvisitedAdjacentNodes = self.get_edges_to_unvisited_adjacent_nodes(
+                graph, ufn, finalCurrentNode)
+            chosenEdge = self.get_edge_with_best_visiting_probability(
+                edgesToUnvisitedAdjacentNodes)
             antTour.append(chosenEdge)
             nextNode = chosenEdge[1] if not ufn.connected(
                 currentNode, chosenEdge[1]) else chosenEdge[2]
@@ -132,8 +136,8 @@ class AntColonyTSPAlgo:
 
     def get_edge_with_best_visiting_probability(self, edgesToUnvisitedAdjacentNodes):
         return max(edgesToUnvisitedAdjacentNodes, key=lambda node: (
-                self.calculate_probability_dividend(node) / self.calculate_probability_divisor(
-            edgesToUnvisitedAdjacentNodes)))
+            self.calculate_probability_dividend(node) / self.calculate_probability_divisor(
+                edgesToUnvisitedAdjacentNodes)))
 
     def calculate_probability_divisor(self, edgesToUnvisitedAdjacentNodes):
         return sum(

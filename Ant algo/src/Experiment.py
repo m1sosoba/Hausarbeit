@@ -1,4 +1,4 @@
-import AntColonyTSPAlgo as ant
+import AntSystem as ant
 import GraphGenerator as gen
 
 
@@ -10,7 +10,8 @@ class Experiment:
         self.run_number = run_number
 
     def run(self):
-        print('Run Experiment with', self.ant_number, 'ants and', self.run_number, 'runs:')
+        print('Run Experiment with', self.ant_number,
+              'ants and', self.run_number, 'runs:')
         print('node | 0.00 | 0.25 | 0.50 | 0.75 | 1.00 |')
         number = 10
         for number in self.node_numbers:
@@ -23,27 +24,27 @@ class Experiment:
             print(self.run_algo_with_evaporation_rate_100_percent(graph), '|')
 
     def run_algo_no_evaporation_rate(self, graph):
-        algo = ant.AntColonyTSPAlgo(1, 1, 0)
+        algo = ant.AntSystem(1, 1, 0)
         tour = algo.get_optimal_tour(graph, self.ant_number, self.ant_number)
         return self.__get_tour_weight(tour)
 
     def run_algo_with_evaporation_rate_25_percent(self, graph):
-        algo = ant.AntColonyTSPAlgo(1, 1, 0.25)
+        algo = ant.AntSystem(1, 1, 0.25)
         tour = algo.get_optimal_tour(graph, self.ant_number, self.ant_number)
         return self.__get_tour_weight(tour)
 
     def run_algo_with_evaporation_rate_50_percent(self, graph):
-        algo = ant.AntColonyTSPAlgo(1, 1, 0.5)
+        algo = ant.AntSystem(1, 1, 0.5)
         tour = algo.get_optimal_tour(graph, self.ant_number, self.ant_number)
         return self.__get_tour_weight(tour)
 
     def run_algo_with_evaporation_rate_75_percent(self, graph):
-        algo = ant.AntColonyTSPAlgo(1, 1, 0.75)
+        algo = ant.AntSystem(1, 1, 0.75)
         tour = algo.get_optimal_tour(graph, self.ant_number, self.ant_number)
         return self.__get_tour_weight(tour)
 
     def run_algo_with_evaporation_rate_100_percent(self, graph):
-        algo = ant.AntColonyTSPAlgo(1, 1, 1)
+        algo = ant.AntSystem(1, 1, 1)
         tour = algo.get_optimal_tour(graph, self.ant_number, self.ant_number)
         return self.__get_tour_weight(tour)
 
@@ -58,7 +59,8 @@ def run_multiple_experiments():
         for ant_number in ant_numbers:
             experiment = Experiment(ant_number, run_number)
             experiment.run()
-            print('*******************************************************************************************')
+            print(
+                '*******************************************************************************************')
 
 
 run_multiple_experiments()
