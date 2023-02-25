@@ -3,13 +3,17 @@ import UnionFindNodes as u
 import random
 
 
-class MinMaxAntsystem:
+class MinMaxAntSytem:
 
     # initialize algorithm with default alpha, beta and evaporation_rate value
     def __init__(self, alpha=1, beta=1, rho=0.5):
         self.alpha = alpha
         self.beta = beta
         self.rho = rho
+        self.bestIterationLength = float("inf")
+        self.bestIterationTour = []
+        self.upperPheromoneLimit = 1
+        self.lowerPheromoneLimit = 0
 
     # Expects a  weighted complete graph, a number of Ants and a number of runs
     # creates the optimal tour thorough a weighted complete graph
@@ -20,8 +24,8 @@ class MinMaxAntsystem:
 
         while currentRun < runs:
             # print(f"run: {currentRun}")
-            newPheromonesPerEdge = self.ants_run(graph, antNumber)
-            self.update_pheromones(graph, newPheromonesPerEdge)
+            self.ants_run(graph, antNumber)
+            self.update_pheromones(graph)
             currentRun += 1
 
         return self.get_tour_with_highest_pheromones(graph)
@@ -50,31 +54,34 @@ class MinMaxAntsystem:
         return finalTour
 
     # update pheromones for every edge
-    # pk,new = (1-rho) * pk,old + rho * sumck(1/L(Ck))
-    def update_pheromones(self, graph: nx.Graph, newPheromonesPerEdge):
+    # pk,new = (1-rho) * pk,old + (1 / best length of current iteration)
+    def update_pheromones(self, graph: nx.Graph):
         for edge in list(graph.edges(data=True)):
-            if (edge[0], edge[1]) in newPheromonesPerEdge:
+            if edge in self.bestIterationTour:
                 if self.rho == 0:
                     edge[2]['pheromones'] = edge[2]["pheromones"] + \
-                        newPheromonesPerEdge[(edge[0], edge[1])]
+                        (1 / self.bestIterationLength)
                 else:
-                    edge[2]['pheromones'] = (1 - self.rho) * edge[2]["pheromones"] + self.rho * (
-                        newPheromonesPerEdge[(edge[0], edge[1])])
+                    edge[2]['pheromones'] = (
+                        1-self.rho) * edge[2]["pheromones"] + (1 / self.bestIterationLength)
             else:
-                edge[2]['pheromones'] = 0
+                edge[2]['pheromones'] = (1-self.rho) * edge[2]["pheromones"]
+
+            if(edge[2]['pheromones'] > self.upperPheromoneLimit):
+                edge[2]['pheromones'] = self.upperPheromoneLimit
+            if(edge[2]['pheromones'] < self.lowerPheromoneLimit):
+                edge[2]['pheromones'] = self.lowerPheromoneLimit
 
     def ants_run(self, graph: nx.Graph, antNumber):
-        newPheromonesPerEdge = {}
+        self.bestIterationLength = float("inf")
+        self.bestIterationTour.clear()
+
         for i in range(antNumber):
             antTour = self.get_ant_tour(graph)
             antTourLength = sum(c['weight'] for a, b, c in antTour)
-
-            for edge in antTour:
-                key = (edge[0], edge[1])
-                pheromones = newPheromonesPerEdge[key] if key in newPheromonesPerEdge else 0
-
-                newPheromonesPerEdge[key] = pheromones + 1 / antTourLength
-        return newPheromonesPerEdge
+            if(antTourLength < self.bestIterationLength):
+                self.bestIterationLength = antTourLength
+                self.bestIterationTour = antTour
 
     # return the tour of one ant over all nodes
     def get_ant_tour(self, graph: nx.Graph):
@@ -110,7 +117,7 @@ class MinMaxAntsystem:
 
         for edge in list(graph.edges(data=True)):
             edge[2]['attractiveness'] = 1 / edge[2]['weight']
-            edge[2]['pheromones'] = 1 / weightOfRandomTour
+            edge[2]['pheromones'] = self.upperPheromoneLimit
 
     # Returns the weight of a randomly created Tour,
     # where each Node is visited once for a weighted complete graph.
