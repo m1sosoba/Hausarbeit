@@ -1,6 +1,8 @@
 import random
 
-import AntSystem as ant
+import AntSystem as AS
+import AntColonySystem as ACS
+import MinMaxAntSystem as MMAS
 import GraphGenerator as gen
 import networkx as nx
 import unittest
@@ -8,7 +10,8 @@ import unittest
 
 class Algotest(unittest.TestCase):
 
-    def test_random_graph(self):
+    # algo kind 0 = AS, 1 = ACS, 2 = MMAS
+    def test_random_graph(self, algo_kind=1):
         graph = gen.GraphGenerator().create_complete_graph(20)
 
         manuel_graph = nx.Graph()
@@ -26,8 +29,13 @@ class Algotest(unittest.TestCase):
                         current_node, target_node, weight=random.randint(1, 10))
                 if j - i == 1 or j - i == (number_of_nodes - 1):
                     manuel_graph.add_edge(current_node, target_node, weight=1)
-
-        algo = ant.AntSystem()
+        match algo_kind:
+            case 1:
+                algo = ACS.AntColonySystem()
+            case 2:
+                also = MMAS.MinMaxAntsystem()
+            case _:
+                algo = AS.AntSystem()
         tour = algo.get_optimal_tour(graph, 10, 10)
         tour_two = algo.get_optimal_tour(manuel_graph, 10, 10)
 
