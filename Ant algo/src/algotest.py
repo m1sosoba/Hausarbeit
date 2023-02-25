@@ -11,7 +11,7 @@ import unittest
 class Algotest(unittest.TestCase):
 
     # algo kind 0 = AS, 1 = ACS, 2 = MMAS
-    def test_random_graph(self, algo_kind=1):
+    def test_random_graph(self, algo_kind=2):
         graph = gen.GraphGenerator().create_complete_graph(20)
 
         manuel_graph = nx.Graph()
@@ -33,7 +33,7 @@ class Algotest(unittest.TestCase):
             case 1:
                 algo = ACS.AntColonySystem()
             case 2:
-                also = MMAS.MinMaxAntSytem()
+                algo = MMAS.MinMaxAntSytem()
             case _:
                 algo = AS.AntSystem()
         tour = algo.get_optimal_tour(graph, 10, 10)
