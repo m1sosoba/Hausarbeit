@@ -33,7 +33,7 @@ class Algotest(unittest.TestCase):
             case 1:
                 algo = ACS.AntColonySystem()
             case 2:
-                also = MMAS.MinMaxAntsystem()
+                also = MMAS.MinMaxAntSytem()
             case _:
                 algo = AS.AntSystem()
         tour = algo.get_optimal_tour(graph, 10, 10)
