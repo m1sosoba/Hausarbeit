@@ -61,7 +61,7 @@ class AntSystem:
                     edge[2]['pheromones'] = (1 - self.rho) * edge[2]["pheromones"] + self.rho * (
                         newPheromonesPerEdge[(edge[0], edge[1])])
             else:
-                edge[2]['pheromones'] = 0
+                edge[2]['pheromones'] = (1 - self.rho) * edge[2]["pheromones"]
 
     def ants_run(self, graph: nx.Graph, antNumber):
         newPheromonesPerEdge = {}
