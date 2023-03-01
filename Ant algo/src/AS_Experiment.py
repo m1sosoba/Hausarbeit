@@ -7,7 +7,7 @@ import os
 class Experiment:
 
     def __init__(self, ant_number, run_number):
-        self.node_numbers = [10, 20, 30, 40, 50]
+        self.node_numbers = [10, 30, 50]
         self.ant_number = ant_number
         self.run_number = run_number
 
@@ -60,15 +60,15 @@ class Experiment:
 
 
 def run_multiple_experiments():
-    ant_numbers = [10, 20, 30, 40, 50]
-    run_numbers = [10, 20, 30, 40, 50]
+    ant_numbers = [10, 30, 50]
+    run_numbers = [10, 30, 50]
     for run_number in run_numbers:
         print(f'runs: {run_number}')
         for ant_number in ant_numbers:
-            experiment = Experiment(ant_number, run_number)
-            experiment.run()
             print(
                 f'ants: {ant_number}')
+            experiment = Experiment(ant_number, run_number)
+            experiment.run()
 
 
 run_multiple_experiments()
