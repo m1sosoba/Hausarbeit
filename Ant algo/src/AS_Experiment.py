@@ -2,6 +2,7 @@ import AntSystem as ant
 import GraphGenerator as gen
 import csv
 import os
+import networkx as nx
 
 
 class Experiment:
@@ -19,7 +20,7 @@ class Experiment:
             writer.writerow(['nodes', 0.00, 0.25, 0.50, 0.75, 1.00])
             number = 10
             for number in self.node_numbers:
-                graph = gen.GraphGenerator().create_complete_graph(number)
+                graph = nx.read_edgelist(f'graph_{number}.edgelist')
 
                 writer.writerow([number, self.run_algo_no_evaporation_rate(graph),
                                 self.run_algo_with_evaporation_rate_25_percent(
