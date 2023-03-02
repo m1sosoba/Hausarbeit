@@ -1,4 +1,4 @@
-import AntColonySystem as ant
+import AntColonySystem as ACS
 import GraphGenerator as gen
 import csv
 import os
@@ -57,13 +57,13 @@ class Experiment:
                              self.run_algo_q(graph, t, 1)])
 
     def run_algo_evaporation_rate(self, graph, t, rho):
-        algo = ant.AntColonySystem(2, 1, rho)
+        algo = ACS.AntColonySystem(2, 1, rho)
         tour = algo.get_optimal_tour(
             graph, t, self.ant_number, self.ant_number)
         return self.__get_tour_weight(tour)
 
     def run_algo_q(self, graph, t, q):
-        algo = ant.AntColonySystem(2, 1, 0)
+        algo = ACS.AntColonySystem(2, 1, 0)
         tour = algo.get_optimal_tour(
             graph, t, self.ant_number, self.ant_number, q)
         return self.__get_tour_weight(tour)
