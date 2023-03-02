@@ -18,7 +18,13 @@ class MinMaxAntSytem:
     # Expects a  weighted complete graph, a number of Ants and a number of runs
     # creates the optimal tour thorough a weighted complete graph
     # where each node has been visited once
-    def get_optimal_tour(self, graph: nx.Graph, antNumber, runs):
+    def get_optimal_tour(self, graph: nx.Graph, antNumber, runs, opt):
+        if self.rho == 0:
+            self.upperPheromoneLimit = opt**(-1)
+        else:
+            self.upperPheromoneLimit = self.rho**(-1) * opt**(-1)
+        self.lowerPheromoneLimit = self.upperPheromoneLimit / \
+            (2 * graph.number_of_nodes())
         currentRun = 0
         self.add_initial_pheromones_and_attractiveness(graph)
 

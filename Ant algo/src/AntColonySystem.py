@@ -9,12 +9,11 @@ class AntColonySystem:
     # alpha = parameter for importance of acttractiveness
     # beta = parameter for importance of pheromones
     # rho = pheromone evaporation rate
-    # q(q0) = parameter to favour exploration(higher q0) or exploitation(smaller q)
-    def __init__(self, alpha=1, beta=1, rho=0.6, q=0.5):
+    def __init__(self, alpha=1, beta=1, rho=0.6):
         self.alpha = alpha
         self.beta = beta
         self.rho = rho
-        self.q = q
+        self.q = 0.9
         self.t = 0.0002
         # t(t0) = (number of nodes *rough approximation of optimal tour length)^-1 -> use small constant should suffice
         self.globalBestLength = float("inf")
@@ -23,7 +22,9 @@ class AntColonySystem:
     # Expects a  weighted complete graph, a number of Ants and a number of runs
     # creates the optimal tour thorough a weighted complete graph
     # where each node has been visited once
-    def get_optimal_tour(self, graph: nx.Graph, antNumber, runs):
+    def get_optimal_tour(self, graph: nx.Graph, t, antNumber, runs, q=0.9):
+        self.q = q
+        self.t = t
         currentRun = 0
         self.add_initial_pheromones_and_attractiveness(graph)
 
